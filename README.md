@@ -1,2 +1,2 @@
 # CampusMarket
-A marketplace for a campus
+A marketplace for a campus / students
