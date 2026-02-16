@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Marketplace - SA Universities</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .category-btn.active {
+            background: linear-gradient(to right, #2563eb, #0891b2);
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 via-cyan-50 to-sky-50 min-h-screen">
+    <div class="bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 py-6">
+            <h1 class="text-3xl font-bold mb-2">🎓 Campus Marketplace</h1>
+            <p class="text-blue-100">Connect with student entrepreneurs at South African universities</p>
+        </div>
+    </div>
+
+    <div class="bg-white shadow-md border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 py-4">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Select Your University</label>
+            <select id="universitySelect" class="w-full md:w-96 px-4 py-3 border-2 border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                <option value="">All Universities</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="bg-white border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex space-x-8">
+                <button onclick="switchTab('browse')" id="browseTab" class="py-4 px-2 font-medium border-b-2 border-blue-600 text-blue-600 transition-colors">
+                    Browse Businesses
+                </button>
+                <button onclick="switchTab('list')" id="listTab" class="py-4 px-2 font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 transition-colors">
+                    ➕ List Your Business
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 py-8">
+        <!-- Browse Section -->
+        <div id="browseSection">
+            <div class="mb-6">
+                <div class="relative">
+                    <svg class="absolute left-4 top-3.5 text-gray-400 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                    <input type="text" id="searchInput" placeholder="Search businesses..." class="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+            </div>
+
+            <div class="mb-8 overflow-x-auto">
+                <div id="categoriesContainer" class="flex space-x-2 pb-2"></div>
+            </div>
+
+            <div id="businessesGrid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+            
+            <div id="noResults" class="text-center py-12 hidden">
+                <div class="text-6xl mb-4">🔍</div>
+                <h3 class="text-xl font-semibold text-gray-700 mb-2">No businesses found</h3>
+                <p class="text-gray-500">Try adjusting your filters or search terms</p>
+            </div>
+        </div>
+
+        <!-- List Business Section -->
+        <div id="listSection" class="hidden max-w-3xl mx-auto">
+            <div class="bg-white rounded-xl shadow-lg p-8 border border-gray-100">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">List Your Business</h2>
+                <div class="space-y-6">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Business Name *</label>
+                            <input type="text" id="businessName" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="e.g., Campus Tutors Pro">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Your Name *</label>
+                            <input type="text" id="ownerName" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="e.g., John Doe">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">University *</label>
+                        <select id="businessUniversity" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                            <option value="">Select your university</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Category *</label>
+                        <select id="businessCategory" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"></select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Description *</label>
+                        <textarea id="businessDescription" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Describe your business, services, and what makes you unique..."></textarea>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Location *</label>
+                            <input type="text" id="businessLocation" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="e.g., Main Campus, Building 3">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Price *</label>
+                            <input type="text" id="businessPrice" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="e.g., R150/hour or From R50">
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Contact Number *</label>
+                            <input type="tel" id="businessContact" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="e.g., 073 456 7890">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Email *</label>
+                            <input type="email" id="businessEmail" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="e.g., business@email.com">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Availability *</label>
+                        <input type="text" id="businessAvailability" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="e.g., Mon-Fri, 18:00-21:00">
+                    </div>
+
+                    <div class="flex space-x-4">
+                        <button onclick="submitBusiness()" class="flex-1 bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-6 py-3 rounded-lg font-medium hover:from-blue-700 hover:to-cyan-700 transition-all shadow-md hover:shadow-lg">
+                            ➕ List Business
+                        </button>
+                        <button onclick="switchTab('browse')" class="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const universities = [
+            'University of Cape Town', 'University of Witwatersrand', 'Stellenbosch University',
+            'University of Pretoria', 'University of KwaZulu-Natal', 'Rhodes University',
+            'University of the Free State', 'University of Johannesburg', 'Nelson Mandela University',
+            'University of the Western Cape', 'North-West University', 'University of South Africa (UNISA)',
+            'Cape Peninsula University of Technology', 'Durban University of Technology',
+            'Tshwane University of Technology', 'Vaal University of Technology',
+            'Walter Sisulu University', 'University of Limpopo', 'University of Venda',
+            'University of Zululand', 'Sol Plaatje University', 'University of Mpumalanga',
+            'Sefako Makgatho Health Sciences University', 'Mangosuthu University of Technology',
+            'Central University of Technology', 'Cape Town Creative Academy'
+        ];
+
+        const categories = [
+            { id: 'all', name: 'All', icon: '🏪' },
+            { id: 'tutoring', name: 'Tutoring', icon: '📚' },
+            { id: 'food', name: 'Food & Catering', icon: '🍕' },
+            { id: 'tech', name: 'Tech Services', icon: '💻' },
+            { id: 'fashion', name: 'Fashion & Beauty', icon: '👗' },
+            { id: 'creative', name: 'Creative Services', icon: '🎨' },
+            { id: 'transport', name: 'Transport', icon: '🚗' },
+            { id: 'events', name: 'Events', icon: '🎉' },
+            { id: 'other', name: 'Other', icon: '✨' }
+        ];
+
+        let businesses = [
+            {
+                id: 1,
+                name: 'Campus Tutors Pro',
+                category: 'tutoring',
+                owner: 'Thabo Molefe',
+                description: 'Mathematics and Physics tutoring for all years. Experienced tutor with 95% pass rate.',
+                university: 'University of Cape Town',
+                price: 'R150/hour',
+                contact: '073 456 7890',
+                email: 'thabo@campustutors.co.za',
+                rating: 4.8,
+                reviews: 24,
+                location: 'Upper Campus',
+                availability: 'Mon-Fri, 18:00-21:00'
+            },
+            {
+                id: 2,
+                name: 'Byte Café Delivery',
+                category: 'food',
+                owner: 'Lindiwe Nkosi',
+                description: 'Delicious homemade meals delivered to your res. Daily specials and bulk orders available.',
+                university: 'University of Witwatersrand',
+                price: 'From R45',
+                contact: '082 123 4567',
+                email: 'orders@bytecafe.co.za',
+                rating: 4.9,
+                reviews: 156,
+                location: 'West Campus Delivery',
+                availability: 'Daily, 11:00-20:00'
+            },
+            {
+                id: 3,
+                name: 'Tech Fix Campus',
+                category: 'tech',
+                owner: 'Michael Chen',
+                description: 'Laptop and phone repairs, software installation, data recovery. Student-friendly prices.',
+                university: 'Stellenbosch University',
+                price: 'From R200',
+                contact: '071 987 6543',
+                email: 'help@techfixcampus.co.za',
+                rating: 4.7,
+                reviews: 89,
+                location: 'Engineering Building',
+                availability: 'Tue-Sat, 09:00-17:00'
+            },
+            {
+                id: 4,
+                name: 'StyleHub Fashion',
+                category: 'fashion',
+                owner: 'Zanele Dlamini',
+                description: 'Custom clothing alterations, styling services, and affordable fashion accessories.',
+                university: 'University of Johannesburg',
+                price: 'From R80',
+                contact: '084 567 8901',
+                email: 'style@stylehub.co.za',
+                rating: 4.6,
+                reviews: 43,
+                location: 'Kingsway Campus',
+                availability: 'Wed-Sun, 10:00-18:00'
+            },
+            {
+                id: 5,
+                name: 'Campus Ride Share',
+                category: 'transport',
+                owner: 'David van der Merwe',
+                description: 'Reliable transport to campus, mall, and airport. Safe and affordable student rates.',
+                university: 'University of Pretoria',
+                price: 'R30-R150',
+                contact: '076 234 5678',
+                email: 'rides@campusride.co.za',
+                rating: 4.5,
+                reviews: 67,
+                location: 'Hatfield Campus',
+                availability: 'Daily, 06:00-22:00'
+            },
+            {
+                id: 6,
+                name: 'Event Planners ZA',
+                category: 'events',
+                owner: 'Nomsa Khumalo',
+                description: 'Birthday parties, study group events, and social gatherings. Full service planning.',
+                university: 'Durban University of Technology',
+                price: 'From R500',
+                contact: '079 876 5432',
+                email: 'events@plannerza.co.za',
+                rating: 4.9,
+                reviews: 32,
+                location: 'Steve Biko Campus',
+                availability: 'By Appointment'
+            }
+        ];
+
+        let selectedUniversity = '';
+        let selectedCategory = 'all';
+        let searchQuery = '';
+        let likedBusinesses = [];
+
+        function init() {
+            const uniSelect = document.getElementById('universitySelect');
+            const bizUniSelect = document.getElementById('businessUniversity');
+            universities.sort().forEach(uni => {
+                const opt1 = document.createElement('option');
+                opt1.value = uni;
+                opt1.textContent = uni;
+                uniSelect.appendChild(opt1);
+
+                const opt2 = document.createElement('option');
+                opt2.value = uni;
+                opt2.textContent = uni;
+                bizUniSelect.appendChild(opt2);
+            });
+
+            const catContainer = document.getElementById('categoriesContainer');
+            categories.forEach(cat => {
+                const btn = document.createElement('button');
+                btn.className = 'category-btn px-4 py-2 rounded-full whitespace-nowrap font-medium transition-all bg-white text-gray-700 hover:bg-gray-100 border border-gray-200';
+                btn.innerHTML = `<span class="mr-2">${cat.icon}</span>${cat.name}`;
+                btn.onclick = () => selectCategory(cat.id);
+                if (cat.id === 'all') btn.classList.add('active');
+                catContainer.appendChild(btn);
+            });
+
+            const bizCatSelect = document.getElementById('businessCategory');
+            categories.filter(c => c.id !== 'all').forEach(cat => {
+                const opt = document.createElement('option');
+                opt.value = cat.id;
+                opt.textContent = `${cat.icon} ${cat.name}`;
+                bizCatSelect.appendChild(opt);
+            });
+
+            document.getElementById('universitySelect').addEventListener('change', (e) => {
+                selectedUniversity = e.target.value;
+                renderBusinesses();
+            });
+
+            document.getElementById('searchInput').addEventListener('input', (e) => {
+                searchQuery = e.target.value;
+                renderBusinesses();
+            });
+
+            renderBusinesses();
+        }
+
+        function selectCategory(catId) {
+            selectedCategory = catId;
+            document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.closest('.category-btn').classList.add('active');
+            renderBusinesses();
+        }
+
+        function renderBusinesses() {
+            const filtered = businesses.filter(b => {
+                const matchesUni = !selectedUniversity || b.university === selectedUniversity;
+                const matchesCat = selectedCategory === 'all' || b.category === selectedCategory;
+                const matchesSearch = !searchQuery || 
+                    b.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    b.description.toLowerCase().includes(searchQuery.toLowerCase());
+                return matchesUni && matchesCat && matchesSearch;
+            });
+
+            const grid = document.getElementById('businessesGrid');
+            const noResults = document.getElementById('noResults');
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                noResults.classList.remove('hidden');
+                return;
+            }
+
+            noResults.classList.add('hidden');
+            grid.innerHTML = filtered.map(b => {
+                const cat = categories.find(c => c.id === b.category);
+                const isLiked = likedBusinesses.includes(b.id);
+                return `
+                    <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow overflow-hidden border border-gray-100">
+                        <div class="bg-gradient-to-r from-blue-500 to-cyan-500 h-2"></div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-3">
+                                <div class="flex-1">
+                                    <h3 class="text-xl font-bold text-gray-800 mb-1">${b.name}</h3>
+                                    <div class="flex items-center text-sm text-gray-600 mb-2">
+                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                        </svg>
+                                        <span>${b.owner}</span>
+                                    </div>
+                                </div>
+                                <button onclick="toggleLike(${b.id})" class="p-2 hover:bg-gray-100 rounded-full transition-colors">
+                                    <svg class="w-5 h-5 ${isLiked ? 'fill-red-500 text-red-500' : 'text-gray-400'}" fill="${isLiked ? 'currentColor' : 'none'}" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium mb-3">
+                                ${cat.icon} ${cat.name}
+                            </div>
+                            <p class="text-gray-600 mb-4 text-sm leading-relaxed">${b.description}</p>
+                            <div class="space-y-2 mb-4 text-sm">
+                                <div class="flex items-start text-gray-700">
+                                    <svg class="w-4 h-4 mr-2 mt-0.5 flex-shrink-0 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    </svg>
+                                    <span>${b.location}, ${b.university}</span>
+                                </div>
+                                <div class="flex items-center text-gray-700">
+                                    <svg class="w-4 h-4 mr-2 flex-shrink-0 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>${b.availability}</span>
+                                </div>
+                                <div class="flex items-center text-gray-700">
+                                    <svg class="w-4 h-4 mr-2 flex-shrink-0 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                                    </svg>
+                                    <span class="font-semibold text-blue-700">${b.price}</span>
+                                </div>
+                            </div>
+                            ${b.rating > 0 ? `
+                                <div class="flex items-center mb-4 text-sm">
+                                    <svg class="w-4 h-4 text-yellow-500 fill-yellow-500 mr-1" viewBox="0 0 24 24">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                                    </svg>
+                                    <span class="font-semibold text-gray-800">${b.rating}</span>
+                                    <span class="text-gray-500 ml-1">(${b.reviews} reviews)</span>
+                                </div>
+                            ` : ''}
+                            <div class="flex space-x-2">
+                                <a href="tel:${b.contact}" class="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-center text-sm font-medium">
+                                    📞 Call
+                                </a>
+                                <a href="mailto:${b.email}" class="flex-1 bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors text-center text-sm font-medium">
+                                    ✉️ Email
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function toggleLike(id) {
+            if (likedBusinesses.includes(id)) {
+                likedBusinesses = likedBusinesses.filter(bid => bid !== id);
+            } else {
+                likedBusinesses.push(id);
+            }
+            renderBusinesses();
+        }
+
+        function switchTab(tab) {
+            const browseSection = document.getElementById('browseSection');
+            const listSection = document.getElementById('listSection');
+            const browseTab = document.getElementById('browseTab');
+            const listTab = document.getElementById('listTab');
+
+            if (tab === 'browse') {
+                browseSection.classList.remove('hidden');
+                listSection.classList.add('hidden');
+                browseTab.className = 'py-4 px-2 font-medium border-b-2 border-blue-600 text-blue-600 transition-colors';
+                listTab.className = 'py-4 px-2 font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 transition-colors';
+            } else {
+                browseSection.classList.add('hidden');
+                listSection.classList.remove('hidden');
+                browseTab.className = 'py-4 px-2 font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 transition-colors';
+                listTab.className = 'py-4 px-2 font-medium border-b-2 border-blue-600 text-blue-600 transition-colors';
+            }
+        }
+
+        function submitBusiness() {
+            const name = document.getElementById('businessName').value;
+            const owner = document.getElementById('ownerName').value;
+            const university = document.getElementById('businessUniversity').value;
+            const category = document.getElementById('businessCategory').value;
+            const description = document.getElementById('businessDescription').value;
+            const location = document.getElementById('businessLocation').value;
+            const price = document.getElementById('businessPrice').value;
+            const contact = document.getElementById('businessContact').value;
+            const email = document.getElementById('businessEmail').value;
+            const availability = document.getElementById('businessAvailability').value;
+
+            if (!name || !owner || !university || !description || !location || !price || !contact || !email || !availability) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            businesses.push({
+                id: businesses.length + 1,
+                name, owner, university, category, description, location, price, contact, email, availability,
+                rating: 0,
+                reviews: 0
+            });
+
+            document.getElementById('businessName').value = '';
+            document.getElementById('ownerName').value = '';
+            document.getElementById('businessUniversity').value = '';
+            document.getElementById('businessCategory').value = 'tutoring';
+            document.getElementById('businessDescription').value = '';
+            document.getElementById('businessLocation').value = '';
+            document.getElementById('businessPrice').value = '';
+            document.getElementById('businessContact').value = '';
+            document.getElementById('businessEmail').value = '';
+            document.getElementById('businessAvailability').value = '';
+
+            switchTab('browse');
+            renderBusinesses();
+            alert('Business listed successfully!');
+        }
+
+        init();
+    </script>
+</body>
+</html>
